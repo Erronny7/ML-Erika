@@ -46,8 +46,26 @@ while True:
 
 	#Encode the face region of interest (ROI) using face _recognition
 	rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-	face_encodings = face_recognition.face_encodings(rgb_frame,[(y, x+w, y+h, x)
+	face_encodings = face_recognition.face_encodings(rgb_frame,[(y, x+w, y+h, x)])
 
 	#Store the face region of interest (ROI), face encoding, and room access as a dictionary with the name
 	face_encoding in face_encodings:
 		face_data.append({"name": name, "face": frame[y:y+h, x:x+w], "face_encoding":  "access": access_list}) 
+
+	#Display the frame
+	cv2.imshow('Register Face', frame)
+
+	if cv2.waitKey(1) & 0xFF == ord('s'):
+		capture_count += 1
+		print(f "Capture {capture_count} complete!")
+	if capture_count >= 5:
+		break
+
+cap.release()
+cv2.destroyAllWindows()
+
+now = datetime.now()
+file.name = f"faces/{now.strftime('%Y-%m-%d-%H-%M-%s')}-{name}.pickle"
+with open (file_name, 'wd') as f:
+	pickle.dump(face_data, f)
+print(f"Face data for '{name}' saved successfully!")
